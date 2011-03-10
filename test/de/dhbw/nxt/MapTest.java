@@ -12,7 +12,25 @@ public class MapTest {
 
 	@Before
 	public void setUp() throws Exception {
-		this.map = new Map(20, 30);
+		String mapContent =
+			"##########\n" +
+			"#        #\n" +
+			"#  # ##  #\n" +
+			"#  ## #  #\n" +
+			"#        #\n" +
+			"##########\n";
+		
+		String[] rows = mapContent.split("\n");
+
+		this.map = new Map(rows[0].length(), rows.length);
+		
+		for (int i = 0; i < rows.length - 1; i++) {
+			for (int j = 0; j < rows[i].length() - 1; j++) {
+				if (rows[i].charAt(j) == '#') {
+					this.map.tileAt(j, i).setNotPassable();
+				}
+			}
+		}
 	}
 
 	@After
@@ -22,11 +40,22 @@ public class MapTest {
 	
 	@Test
 	public void shouldHaveTheCorrectWidth() {
-		assertThat(this.map.getWidth(), is(20));
+		assertThat(this.map.getWidth(), is(10));
 	}
 
 	@Test
 	public void shouldHaveTheCorrectHeight() {
-		assertThat(this.map.getHeight(), is(30));
+		assertThat(this.map.getHeight(), is(6));
+	}
+	
+	@Test
+	public void shouldFindEasyPaths() {
+		int[][] expected = new int[][] {
+			{ 1, 1 },
+			{ 2, 1 },
+			{ 3, 1 }
+		};
+		
+		assertThat(this.map.findPath(1, 1, 3, 1), is(expected));
 	}
 }
