@@ -58,4 +58,15 @@ public class MapTest {
 		
 		assertThat(this.map.findPath(1, 1, 3, 1), is(expected));
 	}
+
+	@Test
+	public void shouldFindComplexPaths() {
+		int[][] expected = new int[][] {
+			{ 1, 1 },
+			{ 2, 1 },
+			{ 3, 1 }
+		};
+		
+		assertThat(this.map.findPath(1, 1, 5, 3), is(expected));
+	}
 }

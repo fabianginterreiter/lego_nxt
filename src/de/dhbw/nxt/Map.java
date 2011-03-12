@@ -1,6 +1,9 @@
 package de.dhbw.nxt;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
 
 public class Map {
 
@@ -50,6 +53,27 @@ public class Map {
 			&& this.tileAt(x, y).isPassable();
 	}
 	
+	class Pythagoras implements Comparator<MapTile> {
+		private int startX;
+		private int startY;
+
+		public Pythagoras(int startX, int startY) {
+			this.startX = startX;
+			this.startY = startY;
+		}
+
+		public double getDistance(MapTile tile) {
+			int x = startX - tile.getX();
+			int y = startY - tile.getY();
+			return Math.sqrt(x * x + y * y);
+		}
+		
+		@Override
+		public int compare(MapTile o1, MapTile o2) {
+			return (int) (getDistance(o1) - getDistance(o2));
+		}
+	}
+	
 	public int[][] findPath(int startX, int startY, int endX, int endY) {
 		this.closedList.clear();
 		this.openList.clear();
@@ -59,8 +83,10 @@ public class Map {
 		startTile.setParent(null);
 		this.openList.add(startTile);
 		
+		MapTile next = null;
+		
 		while (this.openList.size() != 0) {
-			MapTile next = this.openList.remove(0);
+			next = this.openList.remove(0);
 			this.closedList.add(next);
 			
 			if (next.equals(this.tileAt(endX, endY))) {
@@ -72,7 +98,11 @@ public class Map {
 			this.checkNext(next.getX(), next.getY() - 1, next);
 			this.checkNext(next.getX(), next.getY() + 1, next);
 		}
-		
+
+		while (next != null) {
+			System.out.println(next.getX() + "-" + next.getY());
+			next = next.getParent();
+		}
 		
 		return new int[][] {};
 	}
@@ -80,18 +110,24 @@ public class Map {
 	private void checkNext(int x, int y, MapTile current) {
 		if (this.canMoveTo(x, y)) {
 			MapTile next = this.tileAt(x, y);
+
+			if (this.closedList.contains(next)) {
+				return;
+			}
+
+			float nextCost = current.getCost() + 1;
 			
-			if (current.getCost() + 1 < next.getCost()) {
-				this.openList.remove(next);
-				this.closedList.remove(next);
+			if (this.openList.contains(next) && next.getCost() >= nextCost) {
+				return;
 			}
-
-			if (!this.openList.contains(next) && !this.closedList.contains(next)) {
-				next.cost = current.getCost() + 1;
+			
+			next.setParent(current);
+			next.setCost(nextCost);
+			
+			if (!this.openList.contains(next)) {
+				this.openList.add(next);
 			}
-
 		}
 		
 	}
-
 }
