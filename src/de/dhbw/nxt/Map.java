@@ -1,7 +1,6 @@
 package de.dhbw.nxt;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 
@@ -39,13 +38,6 @@ public class Map {
 
 	private ArrayList<MapTile> closedList = new ArrayList<MapTile>();
 	private ArrayList<MapTile> openList = new ArrayList<MapTile>();
-	
-	private double getCost(int startX, int startY, int endX, int endY) {
-		// Pythagoras
-		int x = startX - endX;
-		int y = startY - endY;
-		return Math.sqrt(x * x + y * y);
-	}
 	
 	private boolean canMoveTo(int x, int y) {
 		return x >= 0 && y >= 0
@@ -85,7 +77,11 @@ public class Map {
 		
 		MapTile next = null;
 		
+		Pythagoras comparator = new Pythagoras(startX, startY);
+		
 		while (this.openList.size() != 0) {
+			Collections.sort(this.openList, comparator);
+			
 			next = this.openList.remove(0);
 			this.closedList.add(next);
 			
