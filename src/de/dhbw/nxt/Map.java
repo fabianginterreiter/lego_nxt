@@ -95,12 +95,23 @@ public class Map {
 			this.checkNext(next.getX(), next.getY() + 1, next);
 		}
 
-		while (next != null) {
-			System.out.println(next.getX() + "-" + next.getY());
-			next = next.getParent();
+		return this.buildPathFrom(next);
+	}
+	
+	private int[][] buildPathFrom(MapTile last) {
+		ArrayList<MapTile> pathList = new ArrayList<MapTile>();
+		while (last != null) {
+			pathList.add(0, last);
+			last = last.getParent();
 		}
-		
-		return new int[][] {};
+
+		int[][] result = new int[pathList.size()][2];
+		for (int i = 0; i < pathList.size(); i++) {
+			MapTile mapTile = pathList.get(i);
+			result[i][0] = mapTile.getX();
+			result[i][1] = mapTile.getY();
+		}
+		return result;
 	}
 
 	private void checkNext(int x, int y, MapTile current) {

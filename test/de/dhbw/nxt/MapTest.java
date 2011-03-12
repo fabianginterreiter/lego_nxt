@@ -64,7 +64,13 @@ public class MapTest {
 		int[][] expected = new int[][] {
 			{ 1, 1 },
 			{ 2, 1 },
-			{ 3, 1 }
+			{ 2, 2 },
+			{ 2, 3 },
+			{ 2, 4 },
+			{ 3, 4 },
+			{ 4, 4 },
+			{ 5, 4 },
+			{ 5, 3 }
 		};
 		
 		assertThat(this.map.findPath(1, 1, 5, 3), is(expected));
