@@ -54,6 +54,7 @@
     <java classname="lejos.pc.tools.NXJUpload" fork="true">
       <jvmarg value="-Djava.library.path=${nxj.library.path}"/>
       <jvmarg value="-Dnxj.home=${nxj.home}"/>
+      <jvmarg value="-d32"/>
       <arg value="${binary}"/>
       <classpath>
         <pathelement location="${nxj.jtools.jar}"/>
@@ -72,6 +73,7 @@
     <java classname="lejos.pc.tools.NXJUpload" fork="true">
       <jvmarg value="-Djava.library.path=${nxj.library.path}"/>
       <jvmarg value="-Dnxj.home=${nxj.home}"/>
+      <jvmarg value="-d32"/>
       <arg value="${binary}"/>
       <arg value="-r"/>
       <classpath>
