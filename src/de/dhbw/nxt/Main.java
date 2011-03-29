@@ -1,6 +1,7 @@
 package de.dhbw.nxt;
 
 import lejos.nxt.Motor;
+import lejos.robotics.navigation.*;
 
 public class Main {
 
@@ -8,15 +9,11 @@ public class Main {
 	 * @param args
 	 */
 	public static void main(String[] args) throws Exception {
-		Motor.A.setPower(1);
-		Motor.B.setPower(1);
-		Motor.A.forward();
-		Motor.B.forward();
-		
-		Thread.sleep(500);	
-		
-		Motor.A.stop();
-		Motor.B.stop();
+		// Tachopilot nimmt den Durchmesser und Abstand der RŠder.
+		// Dabei wird der Abstand der RŠder von AUSSEN gemessen.
+		// Bewegungen sind aber sehr ungenau... :(
+		TachoPilot pilot = new TachoPilot(5.6f, 11.2f, Motor.A, Motor.B);
+		pilot.setSpeed(200);
+		pilot.rotate(90);
 	}
-
 }
