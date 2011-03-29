@@ -45,11 +45,11 @@ public class Map {
 			&& this.tileAt(x, y).isPassable();
 	}
 	
-	class Pythagoras implements Comparator<MapTile> {
+	class DistanceComparator implements Comparator<MapTile> {
 		private int startX;
 		private int startY;
 
-		public Pythagoras(int startX, int startY) {
+		public DistanceComparator(int startX, int startY) {
 			this.startX = startX;
 			this.startY = startY;
 		}
@@ -77,7 +77,7 @@ public class Map {
 		
 		MapTile next = null;
 		
-		Pythagoras comparator = new Pythagoras(startX, startY);
+		DistanceComparator comparator = new DistanceComparator(startX, startY);
 		
 		while (this.openList.size() != 0) {
 			Collections.sort(this.openList, comparator);
