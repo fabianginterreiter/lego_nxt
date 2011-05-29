@@ -3,7 +3,6 @@ package de.dhbw.nxt;
 import lejos.nxt.Button;
 import lejos.nxt.LCD;
 import lejos.nxt.LightSensor;
-import lejos.nxt.Motor;
 
 public class Main {
 

@@ -13,8 +13,8 @@ public class Robot {
 		this.lightSensor = new LightSensor(SensorPort.S1);
 		this.ultraSonicSensor = new UltrasonicSensor(SensorPort.S2);
 		
-		Motor.A.setPower(1);
-		Motor.B.setPower(1);
+		Motor.A.setSpeed(400);
+		Motor.B.setSpeed(400);
 	}
 	
 	public UltrasonicSensor getUltrasonicSensor() {
