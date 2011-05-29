@@ -8,8 +8,8 @@ public class Main {
 	 * @param args
 	 */
 	public static void main(String[] args) throws Exception {
-		Motor.A.setPower(1);
-		Motor.B.setPower(1);
+		Motor.A.setSpeed(500);
+		Motor.B.setSpeed(500);
 		Motor.A.forward();
 		Motor.B.forward();
 		
