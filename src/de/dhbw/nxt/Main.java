@@ -1,5 +1,8 @@
 package de.dhbw.nxt;
 
+import lejos.nxt.Button;
+import lejos.nxt.LCD;
+import lejos.nxt.LightSensor;
 import lejos.nxt.Motor;
 
 public class Main {
@@ -8,15 +11,21 @@ public class Main {
 	 * @param args
 	 */
 	public static void main(String[] args) throws Exception {
-		Motor.A.setPower(1);
-		Motor.B.setPower(1);
-		Motor.A.forward();
-		Motor.B.forward();
+		Robot robot = new Robot();
+
+		LightSensor light = robot.getLightSensor();
+		light.setFloodlight(true);
 		
-		Thread.sleep(500);	
+		LCD.drawString("Light %: ", 0, 0);
 		
-		Motor.A.stop();
-		Motor.B.stop();
+		LCD.drawString("Press LEFT", 0, 2);
+		LCD.drawString("to quit", 0, 3);
+		while (!Button.LEFT.isPressed()) {
+			LCD.drawInt(light.readNormalizedValue(), 4, 9, 0);
+		}
+		
+		robot.driveToNextField();
+		robot.driveToNextField();
 	}
 
 }
