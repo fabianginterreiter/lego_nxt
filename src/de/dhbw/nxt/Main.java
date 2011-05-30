@@ -22,9 +22,13 @@ public class Main {
 		while (!Button.LEFT.isPressed()) {
 			LCD.drawInt(light.readNormalizedValue(), 4, 9, 0);
 		}
+
+		robot.moveToFrontField();
+		robot.moveToLeftField();
+		robot.moveToRightField();
+		robot.moveToBackField();
+
 		
-		robot.driveToNextField();
-		robot.driveToNextField();
 	}
 
 }
