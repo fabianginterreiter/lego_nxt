@@ -1,6 +1,8 @@
 package de.dhbw.nxt;
 
-import lejos.nxt.Motor;
+import lejos.nxt.Button;
+import lejos.nxt.LCD;
+import lejos.nxt.LightSensor;
 
 public class Main {
 
@@ -8,15 +10,30 @@ public class Main {
 	 * @param args
 	 */
 	public static void main(String[] args) throws Exception {
-		Motor.A.setSpeed(500);
-		Motor.B.setSpeed(500);
-		Motor.A.forward();
-		Motor.B.forward();
+		Robot robot = new Robot();
+		robot.calibrate();
+
+		robot.moveToNorthField();
+		robot.moveToNorthField();
+
+		robot.moveToWestField();
+		robot.moveToWestField();
 		
-		Thread.sleep(500);	
+		robot.moveToSouthField();
+		robot.moveToSouthField();
+
+		robot.moveToEastField();
+		robot.moveToEastField();
+
+		robot.moveToFrontField();
+		robot.moveToWestField();
 		
-		Motor.A.stop();
-		Motor.B.stop();
+//		robot.moveToFrontField();
+//		robot.moveToLeftField();
+//		robot.moveToRightField();
+//		robot.moveToBackField();
+
+		
 	}
 
 }
