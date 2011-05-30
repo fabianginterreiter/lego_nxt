@@ -1,9 +1,5 @@
 package de.dhbw.nxt;
 
-import lejos.nxt.Button;
-import lejos.nxt.LCD;
-import lejos.nxt.LightSensor;
-
 public class Main {
 
 	/**
@@ -34,28 +30,6 @@ public class Main {
 			
 			currentPos = path[i];
 		}
-		
-		robot.moveToNorthField();
-		robot.moveToNorthField();
-
-		robot.moveToWestField();
-		robot.moveToWestField();
-		
-		robot.moveToSouthField();
-		robot.moveToSouthField();
-
-		robot.moveToEastField();
-		robot.moveToEastField();
-
-		robot.moveToFrontField();
-		robot.moveToWestField();
-		
-//		robot.moveToFrontField();
-//		robot.moveToLeftField();
-//		robot.moveToRightField();
-//		robot.moveToBackField();
-
-		
 	}
 
 }
