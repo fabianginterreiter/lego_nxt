@@ -13,12 +13,10 @@ public class MapTest {
 	@Before
 	public void setUp() throws Exception {
 		String mapContent =
-			"##########\n" +
-			"#        #\n" +
-			"#  # ##  #\n" +
-			"#  ## #  #\n" +
-			"#        #\n" +
-			"##########\n";
+			"        \n" +
+			"  # ##  \n" +
+			"  ## #  \n" +
+			"        \n";
 		
 		String[] rows = mapContent.split("\n");
 
@@ -40,39 +38,39 @@ public class MapTest {
 	
 	@Test
 	public void shouldHaveTheCorrectWidth() {
-		assertThat(this.map.getWidth(), is(10));
+		assertThat(this.map.getWidth(), is(8));
 	}
 
 	@Test
 	public void shouldHaveTheCorrectHeight() {
-		assertThat(this.map.getHeight(), is(6));
+		assertThat(this.map.getHeight(), is(4));
 	}
 	
 	@Test
 	public void shouldFindEasyPaths() {
 		int[][] expected = new int[][] {
-			{ 1, 1 },
-			{ 2, 1 },
-			{ 3, 1 }
+			{ 0, 0 },
+			{ 1, 0 },
+			{ 2, 0 }
 		};
 		
-		assertThat(this.map.findPath(1, 1, 3, 1), is(expected));
+		assertThat(this.map.findPath(0, 0, 2, 0), is(expected));
 	}
 
 	@Test
 	public void shouldFindComplexPaths() {
 		int[][] expected = new int[][] {
+			{ 0, 0 },
+			{ 1, 0 },
 			{ 1, 1 },
-			{ 2, 1 },
-			{ 2, 2 },
+			{ 1, 2 },
+			{ 1, 3 },
 			{ 2, 3 },
-			{ 2, 4 },
-			{ 3, 4 },
-			{ 4, 4 },
-			{ 5, 4 },
-			{ 5, 3 }
+			{ 3, 3 },
+			{ 4, 3 },
+			{ 4, 2 }
 		};
 		
-		assertThat(this.map.findPath(1, 1, 5, 3), is(expected));
+		assertThat(this.map.findPath(0, 0, 4, 2), is(expected));
 	}
 }
