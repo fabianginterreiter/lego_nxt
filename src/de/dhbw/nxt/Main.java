@@ -11,22 +11,27 @@ public class Main {
 	 */
 	public static void main(String[] args) throws Exception {
 		Robot robot = new Robot();
+		robot.calibrate();
 
-		LightSensor light = robot.getLightSensor();
-		light.setFloodlight(true);
+		robot.moveToNorthField();
+		robot.moveToNorthField();
+
+		robot.moveToWestField();
+		robot.moveToWestField();
 		
-		LCD.drawString("Light %: ", 0, 0);
-		
-		LCD.drawString("Press LEFT", 0, 2);
-		LCD.drawString("to quit", 0, 3);
-		while (!Button.LEFT.isPressed()) {
-			LCD.drawInt(light.readNormalizedValue(), 4, 9, 0);
-		}
+		robot.moveToSouthField();
+		robot.moveToSouthField();
+
+		robot.moveToEastField();
+		robot.moveToEastField();
 
 		robot.moveToFrontField();
-		robot.moveToLeftField();
-		robot.moveToRightField();
-		robot.moveToBackField();
+		robot.moveToWestField();
+		
+//		robot.moveToFrontField();
+//		robot.moveToLeftField();
+//		robot.moveToRightField();
+//		robot.moveToBackField();
 
 		
 	}
