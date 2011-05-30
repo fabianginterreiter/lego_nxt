@@ -80,6 +80,8 @@ public class Map {
 		DistanceComparator comparator = new DistanceComparator(startX, startY);
 		
 		while (this.openList.size() != 0) {
+			// TODO: Do not sort here, but fetch the one with the smallest
+			// by looping over all possibilites (faster + works with lejos)
 			Collections.sort(this.openList, comparator);
 			
 			next = this.openList.remove(0);
