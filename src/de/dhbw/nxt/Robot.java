@@ -16,7 +16,7 @@ public class Robot {
 
 	private static int THRESHOLD = 50;
 
-	public static int ROTATE_DEGREES = 95;
+	public static int ROTATE_DEGREES = 90;
 
 	enum Direction {
 		NORTH, SOUTH, EAST, WEST
