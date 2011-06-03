@@ -47,17 +47,6 @@ public class Robot {
 		return this.pilot;
 	}
 
-	public void driveToNextField() {
-		this.driveForward();
-
-		while (this.lightSensor.readValue() <= THRESHOLD) {
-		}
-		while (this.lightSensor.readValue() > THRESHOLD) {
-		}
-
-		this.stopMovement();
-	}
-
 	public boolean onBlackLine() {
 		return this.lightSensor.readValue() <= THRESHOLD;
 	}
