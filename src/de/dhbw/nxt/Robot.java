@@ -137,6 +137,19 @@ public class Robot {
 		this.pilot.travel(-7);
 	}
 
+	public void moveToNextField() {
+		while (!onBlackLine()) {
+			this.driveForward();
+		}
+		while (onBlackLine()) {
+			this.driveForward();
+		}
+		while (!onBlackLine()) {
+			this.driveForward();
+		}
+		this.stopMovement();
+	}
+	
 	public void moveToLeftField() {
 		while (!this.onBlackLine()) {
 			this.driveForward();
@@ -147,35 +160,12 @@ public class Robot {
 
 		this.turnLeft();
 
-		if (!onBlackLine()) {
-			while (!onBlackLine()) {
-				this.driveForward();
-			}
-		}
-		while (onBlackLine()) {
-			this.driveForward();
-		}
-		while (!onBlackLine()) {
-			this.driveForward();
-		}
-
-		this.stopMovement();
+		this.moveToNextField();
 		this.repositionInField();
 	}
 
 	public void moveToFrontField() {
-		while (!this.onBlackLine()) {
-			this.driveForward();
-		}
-
-		while (onBlackLine()) {
-			this.driveForward();
-		}
-		while (!onBlackLine()) {
-			this.driveForward();
-		}
-
-		this.stopMovement();
+		this.moveToNextField();
 		this.repositionInField();
 	}
 
@@ -190,19 +180,7 @@ public class Robot {
 		this.turnLeft();
 		this.turnLeft();
 
-		if (!onBlackLine()) {
-			while (!onBlackLine()) {
-				this.driveForward();
-			}
-		}
-		while (onBlackLine()) {
-			this.driveForward();
-		}
-		while (!onBlackLine()) {
-			this.driveForward();
-		}
-
-		this.stopMovement();
+		this.moveToNextField();
 		this.repositionInField();
 	}
 
@@ -216,19 +194,7 @@ public class Robot {
 
 		this.turnRight();
 
-		if (!onBlackLine()) {
-			while (!onBlackLine()) {
-				this.driveForward();
-			}
-		}
-		while (onBlackLine()) {
-			this.driveForward();
-		}
-		while (!onBlackLine()) {
-			this.driveForward();
-		}
-
-		this.stopMovement();
+		this.moveToNextField();
 		this.repositionInField();
 	}
 
