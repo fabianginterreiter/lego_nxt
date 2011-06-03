@@ -50,7 +50,7 @@ public class Robot {
 	public boolean onBlackLine() {
 		return this.lightSensor.readValue() <= THRESHOLD;
 	}
-
+	
 	public void moveToNorthField() {
 		switch (this.direction) {
 		case NORTH:
@@ -127,13 +127,24 @@ public class Robot {
 		}
 	}
 
+	public void repositionInField() {
+		try {
+			Thread.sleep(1000);
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		this.pilot.travel(-7);
+	}
+
 	public void moveToLeftField() {
 		while (!this.onBlackLine()) {
 			this.driveForward();
 		}
-		this.stopMovement();
 
-		this.pilot.travel(-5.5);
+		this.stopMovement();
+		this.repositionInField();
+
 		this.turnLeft();
 
 		if (!onBlackLine()) {
@@ -141,16 +152,15 @@ public class Robot {
 				this.driveForward();
 			}
 		}
-
 		while (onBlackLine()) {
 			this.driveForward();
 		}
 		while (!onBlackLine()) {
 			this.driveForward();
 		}
-		;
 
-		this.pilot.travel(-5.5);
+		this.stopMovement();
+		this.repositionInField();
 	}
 
 	public void moveToFrontField() {
@@ -164,18 +174,19 @@ public class Robot {
 		while (!onBlackLine()) {
 			this.driveForward();
 		}
-		;
 
-		this.pilot.travel(-5.5);
+		this.stopMovement();
+		this.repositionInField();
 	}
 
 	public void moveToBackField() {
 		while (!this.onBlackLine()) {
 			this.driveForward();
 		}
-		this.stopMovement();
 
-		this.pilot.travel(-5.5);
+		this.stopMovement();
+		this.repositionInField();
+
 		this.turnLeft();
 		this.turnLeft();
 
@@ -184,25 +195,25 @@ public class Robot {
 				this.driveForward();
 			}
 		}
-
 		while (onBlackLine()) {
 			this.driveForward();
 		}
 		while (!onBlackLine()) {
 			this.driveForward();
 		}
-		;
 
-		this.pilot.travel(-5.5);
+		this.stopMovement();
+		this.repositionInField();
 	}
 
 	public void moveToRightField() {
 		while (!this.onBlackLine()) {
 			this.driveForward();
 		}
-		this.stopMovement();
 
-		this.pilot.travel(-5.5);
+		this.stopMovement();
+		this.repositionInField();
+
 		this.turnRight();
 
 		if (!onBlackLine()) {
@@ -210,16 +221,15 @@ public class Robot {
 				this.driveForward();
 			}
 		}
-
 		while (onBlackLine()) {
 			this.driveForward();
 		}
 		while (!onBlackLine()) {
 			this.driveForward();
 		}
-		;
 
-		this.pilot.travel(-5.5);
+		this.stopMovement();
+		this.repositionInField();
 	}
 
 	public void turnRight() {
