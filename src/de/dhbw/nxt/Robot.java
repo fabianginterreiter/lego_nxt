@@ -26,7 +26,7 @@ public class Robot {
 		this.lightSensor = new LightSensor(SensorPort.S1);
 		this.lightSensor.setFloodlight(true);
 
-		this.ultraSonicSensor = new UltrasonicSensor(SensorPort.S2);
+		this.ultraSonicSensor = new UltrasonicSensor(SensorPort.S4);
 
 		this.pilot = new DifferentialPilot(5.6, 11.2, Motor.A, Motor.B);
 		this.pilot.setTravelSpeed(12);
@@ -137,10 +137,39 @@ public class Robot {
 		this.pilot.travel(-7);
 	}
 
+    public void waitForFreeField() {
+        this.stopMovement();
+        
+        try {
+            float lastRange = this.ultraSonicSensor.getRange();
+            float newRange = lastRange;
+            
+            if (newRange < 30)
+            {
+            	do {
+	                LCD.clear();
+	                LCD.drawString(newRange + "", 0, 0);
+	                
+	                lejos.nxt.Sound.beep();
+	                Thread.sleep(5000);
+	
+	                newRange = this.ultraSonicSensor.getRange();
+	            } while (newRange < 30 && Math.abs(lastRange - newRange) > 3);
+            }
+        } catch (InterruptedException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+    }
+	
 	public void moveToNextField() {
 		while (!onBlackLine()) {
 			this.driveForward();
 		}
+		this.stopMovement();
+
+		this.waitForFreeField();
+
 		while (onBlackLine()) {
 			this.driveForward();
 		}
