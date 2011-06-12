@@ -14,12 +14,13 @@ public class Main {
 
 		int[] currentPos = { 0, 0 };
 		
-		int[][] path = map.findPath(0, 0, 3, 3);
+		
+		int[][] path = map.findPath(0, 0, 1, 2);
 		for(int i = 0; i < path.length; i++) {
 			if (currentPos[0] < path[i][0]) {
-				robot.moveToEastField();
-			} else if (currentPos[0] > path[i][0]) {
 				robot.moveToWestField();
+			} else if (currentPos[0] > path[i][0]) {
+				robot.moveToEastField();
 			}
 			
 			if (currentPos[1] < path[i][1]) {
