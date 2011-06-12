@@ -43,7 +43,7 @@ public class Navigator {
 		return this.robot.getUltrasonicSensor();
 	}
 
-	public void moveToNorthField() {
+	public void moveToNorthField() throws MovementBlockedException {
 		switch (this.direction) {
 		case NORTH:
 			this.moveToFrontField();
@@ -62,7 +62,7 @@ public class Navigator {
 		}
 	}
 
-	public void moveToSouthField() {
+	public void moveToSouthField() throws MovementBlockedException {
 		switch (this.direction) {
 		case SOUTH:
 			this.moveToFrontField();
@@ -81,7 +81,7 @@ public class Navigator {
 		}
 	}
 
-	public void moveToEastField() {
+	public void moveToEastField() throws MovementBlockedException {
 		switch (this.direction) {
 		case SOUTH:
 			this.moveToLeftField();
@@ -100,7 +100,7 @@ public class Navigator {
 		}
 	}
 
-	public void moveToWestField() {
+	public void moveToWestField() throws MovementBlockedException {
 		switch (this.direction) {
 		case SOUTH:
 			this.moveToRightField();
@@ -129,24 +129,31 @@ public class Navigator {
 		pilot.travel(-7);
 	}
 
-	public void waitForFreeField() {
+	public void waitForFreeField() throws MovementBlockedException {
 	    this.stopMovement();
 	    
 	    try {
+	    	int retries = 0;
 	        float lastRange = this.getUltrasonicSensor().getRange();
 	        float newRange = lastRange;
 	        
 	        if (newRange < 30)
 	        {
 	        	do {
-	                LCD.clear();
-	                LCD.drawString(newRange + "", 0, 0);
+	        		retries++;
+//	                LCD.clear();
+//	                LCD.drawString(newRange + "", 0, 0);
 	                
 	                lejos.nxt.Sound.beep();
 	                Thread.sleep(5000);
 	
+	                lastRange = newRange;
 	                newRange = this.getUltrasonicSensor().getRange();
-	            } while (newRange < 30 && Math.abs(lastRange - newRange) > 3);
+	            } while (newRange < 30 && retries < 3);
+	        	
+	        	if (retries == 3) {
+	        		throw new MovementBlockedException();
+	        	}
 	        }
 	    } catch (InterruptedException e) {
 	        // TODO Auto-generated catch block
@@ -154,7 +161,7 @@ public class Navigator {
 	    }
 	}
 
-	public void moveToNextField() {
+	public void moveToNextField() throws MovementBlockedException {
 		while (!this.onBlackLine()) {
 			this.driveForward();
 		}
@@ -171,7 +178,7 @@ public class Navigator {
 		this.stopMovement();
 	}
 
-	public void moveToLeftField() {
+	public void moveToLeftField() throws MovementBlockedException {
 		while (!this.onBlackLine()) {
 			this.driveForward();
 		}
@@ -185,12 +192,12 @@ public class Navigator {
 		this.repositionInField();
 	}
 
-	public void moveToFrontField() {
+	public void moveToFrontField() throws MovementBlockedException {
 		this.moveToNextField();
 		this.repositionInField();
 	}
 
-	public void moveToBackField() {
+	public void moveToBackField() throws MovementBlockedException {
 		while (!this.onBlackLine()) {
 			this.driveForward();
 		}
@@ -205,7 +212,7 @@ public class Navigator {
 		this.repositionInField();
 	}
 
-	public void moveToRightField() {
+	public void moveToRightField() throws MovementBlockedException {
 		while (!this.onBlackLine()) {
 			this.driveForward();
 		}
