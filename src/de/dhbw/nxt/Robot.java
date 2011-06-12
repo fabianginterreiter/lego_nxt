@@ -36,7 +36,7 @@ public class Robot {
 	}
 
 	public void moveTo(int x, int y) {
-		int[][] path = map.findPath(0, 0, 1, 2);
+		int[][] path = map.findPath(this.currentPos[0], this.currentPos[1], x, y);
 
 		for(int i = 0; i < path.length; i++) {
 			if (this.currentPos[0] < path[i][0]) {
