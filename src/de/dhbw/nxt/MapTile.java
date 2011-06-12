@@ -37,6 +37,13 @@ public class MapTile {
 		return cost;
 	}
 
+	public double distanceTo(int startX, int startY) {
+		int x = startX - this.x;
+		int y = startY - this.y;
+		
+		return Math.sqrt(x * x + y * y);
+	}
+	
 	public void setParent(MapTile parent) {
 		this.parent = parent;
 	}

@@ -1,8 +1,7 @@
 package de.dhbw.nxt;
 
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
+import java.util.Iterator;
 
 public class Map {
 
@@ -45,27 +44,6 @@ public class Map {
 			&& this.tileAt(x, y).isPassable();
 	}
 	
-	class DistanceComparator implements Comparator<MapTile> {
-		private int startX;
-		private int startY;
-
-		public DistanceComparator(int startX, int startY) {
-			this.startX = startX;
-			this.startY = startY;
-		}
-
-		public double getDistance(MapTile tile) {
-			int x = startX - tile.getX();
-			int y = startY - tile.getY();
-			return Math.sqrt(x * x + y * y);
-		}
-		
-		@Override
-		public int compare(MapTile o1, MapTile o2) {
-			return (int) (getDistance(o1) - getDistance(o2));
-		}
-	}
-	
 	public int[][] findPath(int startX, int startY, int endX, int endY) {
 		this.closedList.clear();
 		this.openList.clear();
@@ -77,14 +55,12 @@ public class Map {
 		
 		MapTile next = null;
 		
-		DistanceComparator comparator = new DistanceComparator(startX, startY);
-		
 		while (this.openList.size() != 0) {
 			// TODO: Do not sort here, but fetch the one with the smallest
 			// by looping over all possibilites (faster + works with lejos)
-			Collections.sort(this.openList, comparator);
+			next = this.getNodeWithLowestCostFromOpenList(startX, startY);
 			
-			next = this.openList.remove(0);
+			this.openList.remove(next);
 			this.closedList.add(next);
 			
 			if (next.equals(this.tileAt(endX, endY))) {
@@ -96,10 +72,26 @@ public class Map {
 			this.checkNext(next.getX(), next.getY() - 1, next);
 			this.checkNext(next.getX(), next.getY() + 1, next);
 		}
-
+		
 		return this.buildPathFrom(next);
 	}
 	
+	private MapTile getNodeWithLowestCostFromOpenList(int startX, int startY) {
+		Iterator<MapTile> iterator = this.openList.iterator();
+		
+		MapTile best = iterator.next();
+		
+		while (iterator.hasNext()) {
+			MapTile curr = iterator.next();
+
+			if (curr.distanceTo(startX, startY) < best.distanceTo(startX, startY)) {
+				best = curr;
+			}
+		}
+		
+		return best;
+	}
+
 	private int[][] buildPathFrom(MapTile last) {
 		ArrayList<MapTile> pathList = new ArrayList<MapTile>();
 		while (last != null) {
