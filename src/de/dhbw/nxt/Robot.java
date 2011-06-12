@@ -16,7 +16,7 @@ public class Robot {
 
 	private static int THRESHOLD = 50;
 
-	public static int ROTATE_DEGREES = 95;
+	public static int ROTATE_DEGREES = 90;
 
 	enum Direction {
 		NORTH, SOUTH, EAST, WEST
@@ -47,21 +47,10 @@ public class Robot {
 		return this.pilot;
 	}
 
-	public void driveToNextField() {
-		this.driveForward();
-
-		while (this.lightSensor.readValue() <= THRESHOLD) {
-		}
-		while (this.lightSensor.readValue() > THRESHOLD) {
-		}
-
-		this.stopMovement();
-	}
-
 	public boolean onBlackLine() {
 		return this.lightSensor.readValue() <= THRESHOLD;
 	}
-
+	
 	public void moveToNorthField() {
 		switch (this.direction) {
 		case NORTH:
@@ -138,20 +127,48 @@ public class Robot {
 		}
 	}
 
-	public void moveToLeftField() {
-		while (!this.onBlackLine()) {
+	public void repositionInField() {
+		try {
+			Thread.sleep(1000);
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		this.pilot.travel(-7);
+	}
+
+    public void waitForFreeField() {
+        this.stopMovement();
+        
+        try {
+            float lastRange = this.ultraSonicSensor.getRange();
+            float newRange = lastRange;
+            
+            if (newRange < 30)
+            {
+            	do {
+	                LCD.clear();
+	                LCD.drawString(newRange + "", 0, 0);
+	                
+	                lejos.nxt.Sound.beep();
+	                Thread.sleep(5000);
+	
+	                newRange = this.ultraSonicSensor.getRange();
+	            } while (newRange < 30 && Math.abs(lastRange - newRange) > 3);
+            }
+        } catch (InterruptedException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+    }
+	
+	public void moveToNextField() {
+		while (!onBlackLine()) {
 			this.driveForward();
 		}
 		this.stopMovement();
 
-		this.pilot.travel(-5.5);
-		this.turnLeft();
-
-		if (!onBlackLine()) {
-			while (!onBlackLine()) {
-				this.driveForward();
-			}
-		}
+		this.waitForFreeField();
 
 		while (onBlackLine()) {
 			this.driveForward();
@@ -159,78 +176,55 @@ public class Robot {
 		while (!onBlackLine()) {
 			this.driveForward();
 		}
-		;
-
-		this.pilot.travel(-5.5);
+		this.stopMovement();
 	}
-
-	public void moveToFrontField() {
+	
+	public void moveToLeftField() {
 		while (!this.onBlackLine()) {
 			this.driveForward();
 		}
 
-		while (onBlackLine()) {
-			this.driveForward();
-		}
-		while (!onBlackLine()) {
-			this.driveForward();
-		}
-		;
+		this.stopMovement();
+		this.repositionInField();
 
-		this.pilot.travel(-5.5);
+		this.turnLeft();
+
+		this.moveToNextField();
+		this.repositionInField();
+	}
+
+	public void moveToFrontField() {
+		this.moveToNextField();
+		this.repositionInField();
 	}
 
 	public void moveToBackField() {
 		while (!this.onBlackLine()) {
 			this.driveForward();
 		}
+
 		this.stopMovement();
+		this.repositionInField();
 
-		this.pilot.travel(-5.5);
 		this.turnLeft();
 		this.turnLeft();
 
-		if (!onBlackLine()) {
-			while (!onBlackLine()) {
-				this.driveForward();
-			}
-		}
-
-		while (onBlackLine()) {
-			this.driveForward();
-		}
-		while (!onBlackLine()) {
-			this.driveForward();
-		}
-		;
-
-		this.pilot.travel(-5.5);
+		this.moveToNextField();
+		this.repositionInField();
 	}
 
 	public void moveToRightField() {
 		while (!this.onBlackLine()) {
 			this.driveForward();
 		}
-		this.stopMovement();
 
-		this.pilot.travel(-5.5);
+		this.stopMovement();
+		this.repositionInField();
+
 		this.turnRight();
 
-		if (!onBlackLine()) {
-			while (!onBlackLine()) {
-				this.driveForward();
-			}
-		}
-
-		while (onBlackLine()) {
-			this.driveForward();
-		}
-		while (!onBlackLine()) {
-			this.driveForward();
-		}
-		;
-
-		this.pilot.travel(-5.5);
+		this.moveToNextField();
+		this.repositionInField();
 	}
 
 	public void turnRight() {
