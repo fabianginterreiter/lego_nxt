@@ -26,7 +26,7 @@ public class Robot {
 		this.lightSensor = new LightSensor(SensorPort.S1);
 		this.lightSensor.setFloodlight(true);
 
-		this.ultraSonicSensor = new UltrasonicSensor(SensorPort.S2);
+		this.ultraSonicSensor = new UltrasonicSensor(SensorPort.S4);
 
 		this.pilot = new DifferentialPilot(5.6, 11.2, Motor.A, Motor.B);
 		this.pilot.setTravelSpeed(12);
