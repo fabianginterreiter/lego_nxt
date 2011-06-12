@@ -36,34 +36,49 @@ public class Robot {
 	}
 
 	public void moveTo(int x, int y) {
-		int[][] path = map.findPath(this.currentPos[0], this.currentPos[1], x, y);
-
-		System.out.println("[ " + this.currentPos[0] + "/" + this.currentPos[1] + " -> " + x + "/" + y + " ]");
-		
-		int i = 0;
 		try {
-			for (; i < path.length; i++) {
-				 System.out.println(this.currentPos[0] + "/" + this.currentPos[1] + " -> " + path[i][0] + "/" + path[i][1]);
-				// Button.ENTER.waitForPressAndRelease();
-				if (this.currentPos[0] < path[i][0]) {
-					this.navigator.moveToWestField();
-				} else if (this.currentPos[0] > path[i][0]) {
-					this.navigator.moveToEastField();
-				}
+			int i = 0;
+			int[][] path = map.findPath(this.currentPos[0], this.currentPos[1], x, y);
 
-				if (this.currentPos[1] < path[i][1]) {
-					this.navigator.moveToSouthField();
-				} else if (this.currentPos[1] > path[i][1]) {
-					this.navigator.moveToNorthField();
-				}
+			System.out.println("[ " + this.currentPos[0] + "/" + this.currentPos[1] + " -> " + x + "/" + y + " ]");
 
-				this.currentPos = path[i];
+			try {
+
+				for (; i < path.length; i++) {
+					System.out.println(this.currentPos[0] + "/" + this.currentPos[1] + " -> " + path[i][0] + "/" + path[i][1]);
+					// Button.ENTER.waitForPressAndRelease();
+					if (this.currentPos[0] < path[i][0]) {
+						this.navigator.moveToWestField();
+					} else if (this.currentPos[0] > path[i][0]) {
+						this.navigator.moveToEastField();
+					}
+
+					if (this.currentPos[1] < path[i][1]) {
+						this.navigator.moveToSouthField();
+					} else if (this.currentPos[1] > path[i][1]) {
+						this.navigator.moveToNorthField();
+					}
+
+					this.currentPos = path[i];
+				}
+			} catch (MovementBlockedException e) {
+				this.map.tileAt(path[i][0], path[i][1]).setTemporarilyNotPassable();
+				
+				// Retry with different path now
+				this.moveTo(x, y);
 			}
-		} catch (MovementBlockedException e) {
-			this.map.tileAt(path[i][0], path[i][1]).setTemporarilyNotPassable();
-			// Retry with different path now
+		} catch (NoPathFoundException e) {
+			lejos.nxt.Sound.buzz();
+			System.out.println("No path found, retrying in 30 seconds");
+			
+			// All paths are blocked, retry in 10 seconds
+			try {
+				Thread.sleep(30000);
+			} catch (InterruptedException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
 			this.moveTo(x, y);
-			//			e.printStackTrace();
 		}
 	}
 

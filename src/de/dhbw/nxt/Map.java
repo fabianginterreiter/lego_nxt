@@ -44,7 +44,7 @@ public class Map {
 			&& this.tileAt(x, y).isPassable();
 	}
 	
-	public int[][] findPath(int startX, int startY, int endX, int endY) {
+	public int[][] findPath(int startX, int startY, int endX, int endY) throws NoPathFoundException {
 		this.closedList.clear();
 		this.openList.clear();
 		
@@ -71,6 +71,10 @@ public class Map {
 			this.checkNext(next.getX() + 1, next.getY(), next);
 			this.checkNext(next.getX(), next.getY() - 1, next);
 			this.checkNext(next.getX(), next.getY() + 1, next);
+		}
+		
+		if (next.getX() != endX || next.getY() != endY) {
+			throw new NoPathFoundException();
 		}
 		
 		return this.buildPathFrom(next);
