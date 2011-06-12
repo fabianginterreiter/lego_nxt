@@ -14,6 +14,7 @@ public class Robot {
 	private LightSensor lightSensor;
 	private Map map;
 	private int[] currentPos;
+	private JobQueue jobs;
 
 	public Robot(Map map) {
 		this.map = map;
@@ -25,6 +26,8 @@ public class Robot {
 		this.ultraSonicSensor = new UltrasonicSensor(SensorPort.S4);
 
 		this.navigator = new Navigator(this);
+
+		this.jobs = new JobQueue();
 	}
 
 	public UltrasonicSensor getUltrasonicSensor() {
@@ -34,6 +37,24 @@ public class Robot {
 	public LightSensor getLightSensor() {
 		return this.lightSensor;
 	}
+	
+	public JobQueue getJobs() {
+		return jobs;
+	}
+	
+	public void processQueue() {
+		Job job;
+		while ((job = this.jobs.bestJob(this.currentPos)) != null) {
+			if (!job.isFetched()) {
+				this.moveTo(job.getFetchX(), job.getFetchY());
+				job.setFetched();
+			} else {
+				this.moveTo(job.getDeliverX(), job.getDeliverY());
+				job.setDelivered();
+			}
+		}
+	}
+	
 
 	public void moveTo(int x, int y) {
 		try {
