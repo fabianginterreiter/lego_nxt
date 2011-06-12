@@ -29,8 +29,8 @@ public class MapTile {
 	}
 	
 	public boolean isPassable() {
-		// Temporarily not passable fields are only unpassable for 10 seconds
-		return (System.currentTimeMillis() - this.blockedAt) > 30000;
+		// Temporarily not passable fields are only unpassable for 2 minutes
+		return (System.currentTimeMillis() - this.blockedAt) > 120000;
 	}
 
 	public void setCost(float cost) {
