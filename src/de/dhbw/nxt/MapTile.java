@@ -10,6 +10,8 @@ public class MapTile {
 	public MapTile(int x, int y) {
 		this.x = x;
 		this.y = y;
+		
+		this.blockedAt = System.currentTimeMillis() - 120000;
 	}
 	
 	public int getX() {
