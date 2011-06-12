@@ -1,16 +1,15 @@
 package de.dhbw.nxt;
 
 public class MapTile {
-	private boolean passable;
 	private float cost;
 	private MapTile parent;
 	private int y;
 	private int x;
+	private long blockedAt;
 	
 	public MapTile(int x, int y) {
 		this.x = x;
 		this.y = y;
-		this.passable = true;
 	}
 	
 	public int getX() {
@@ -21,12 +20,17 @@ public class MapTile {
 		return this.y;
 	}
 	
-	public void setNotPassable() {
-		this.passable = false;
+	public void setPermanentlyNotPassable() {
+		this.blockedAt = Long.MAX_VALUE;
+	}
+	
+	public void setTemporarilyNotPassable() {
+		this.blockedAt = System.currentTimeMillis();
 	}
 	
 	public boolean isPassable() {
-		return this.passable;
+		// Temporarily not passable fields are only unpassable for 10 seconds
+		return (System.currentTimeMillis() - this.blockedAt) > 10000;
 	}
 
 	public void setCost(float cost) {

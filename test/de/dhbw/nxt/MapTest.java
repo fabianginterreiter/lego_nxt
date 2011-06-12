@@ -25,7 +25,7 @@ public class MapTest {
 		for (int i = 0; i < rows.length - 1; i++) {
 			for (int j = 0; j < rows[i].length() - 1; j++) {
 				if (rows[i].charAt(j) == '#') {
-					this.map.tileAt(j, i).setNotPassable();
+					this.map.tileAt(j, i).setPermanentlyNotPassable();
 				}
 			}
 		}
