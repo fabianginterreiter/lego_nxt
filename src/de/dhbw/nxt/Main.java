@@ -13,9 +13,8 @@ public class Main {
 		map.tileAt(1, 1).setNotPassable();
 
 		int[] currentPos = { 0, 0 };
-		
-		
 		int[][] path = map.findPath(0, 0, 1, 2);
+
 		for(int i = 0; i < path.length; i++) {
 			if (currentPos[0] < path[i][0]) {
 				robot.moveToWestField();
