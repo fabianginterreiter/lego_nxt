@@ -12,7 +12,7 @@ public class JobQueue {
 		this.currentJob = null;
 	}
 
-	public void addJob(Job job) {
+	synchronized public void addJob(Job job) {
 		this.queue.add(job);
 	}
 
@@ -20,6 +20,10 @@ public class JobQueue {
 		return (this.currentJob != null && this.currentJob.isDelivered());
 	}
 
+	public int size() {
+		return this.queue.size();
+	}
+	
 	public Job bestJob(int[] currentPos) {
 		if (this.queue.isEmpty()) {
 			return null;
