@@ -1,6 +1,7 @@
 package de.dhbw.nxt;
 
 import lejos.nxt.LCD;
+import lejos.nxt.comm.RConsole;
 
 
 public class Robot {
@@ -9,23 +10,12 @@ public class Robot {
 	private BTHandler btHandler;
 
 	public Robot() {
+		this.setQueue(new JobQueue());
+
 		this.btHandler = new BTHandler(this);
 		this.btHandler.connect();
 		
-		this.btHandlerThread = new Thread(this.btHandler);
-		this.btHandlerThread.start();
-		
-		try {
-			Thread.sleep(10000);
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		
-		this.setQueue(new JobQueue());
-		
-//		Job job = new Job(3, 3, 4, 4);
-//		this.queue.addJob(job);
+		new Thread(this.btHandler).start();
 	}
 	
 	public void processQueue() {
@@ -33,51 +23,19 @@ public class Robot {
 		int i = 0;
 		
 		while (true) {
-			synchronized (this.btHandler.newJobs) {
-				for (Job j : this.btHandler.newJobs) {
-					this.getQueue().addJob(j);
-				}
-				
-				this.btHandler.newJobs.clear();
-			}
-			
 			Job nextJob = this.getQueue().bestJob(currentPos);
-
-			LCD.clear();
-			
-			LCD.drawString("Queue Size: " + this.queue.size(), 0, 0);
-			LCD.drawString("" + nextJob, 0, 1);
 			
 			if (nextJob != null) {
-				try {
-					Thread.sleep(3000);
-				} catch (InterruptedException e) {
-//					System.out.println("Thread.sleep 3000");
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-
+				RConsole.println("[QUEUE] [ID=" + nextJob.getId() + "] Fetched: " + nextJob.isFetched() + ", Delivered: " + nextJob.isDelivered());
+				
 				if (nextJob.isFetched()) {
-					LCD.drawString("Deliver: " + nextJob.getDeliverX() + "/" + nextJob.getDeliverY(), 0, 2);
+					RConsole.println("[QUEUE] [ID=" + nextJob.getId() + "] Delivered To: " + nextJob.getDeliverX() + "/" + nextJob.getDeliverY());
 					nextJob.setDelivered();
 				} else {
-					LCD.drawString("Fetch: " + nextJob.getDeliverX() + "/" + nextJob.getDeliverY(), 0, 2);
+					RConsole.println("[QUEUE] [ID=" + nextJob.getId() + "] Fetched From: " + nextJob.getDeliverX() + "/" + nextJob.getDeliverY());
 					nextJob.setFetched();
 				}
 			}
-
-			LCD.drawString("Waiting... " + i, 0, 3);
-			
-			i++;
-			
-			try {
-//				System.out.println("Thread.sleep 1000");
-				Thread.sleep(1000);
-			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-
 		}
 	}
 
