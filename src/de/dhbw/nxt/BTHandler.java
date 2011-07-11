@@ -4,8 +4,6 @@ import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
-
-import lejos.nxt.LCD;
 import lejos.nxt.comm.BTConnection;
 import lejos.nxt.comm.Bluetooth;
 import lejos.nxt.comm.RConsole;
@@ -22,6 +20,8 @@ public class BTHandler implements Runnable {
 		this.newJobs = new ArrayList<Job>();
 	}
 
+	
+	
 	public void connect() {
 		RConsole.println("[BT] Connecting");
 

@@ -1,17 +1,15 @@
 package de.dhbw.nxt;
 
-import lejos.nxt.LCD;
 import lejos.nxt.comm.RConsole;
 
 
 public class Robot {
-	private Thread btHandlerThread;
 	private JobQueue queue;
 	private BTHandler btHandler;
 
 	public Robot() {
 		this.setQueue(new JobQueue());
-
+		
 		this.btHandler = new BTHandler(this);
 		this.btHandler.connect();
 		
