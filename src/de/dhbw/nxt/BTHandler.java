@@ -23,16 +23,12 @@ public class BTHandler implements Runnable {
 	}
 
 	public void connect() {
-		LCD.clear();
-		LCD.drawString("Connecting", 0, 0);
-		LCD.refresh();
+		RConsole.println("[BT] Connecting");
 
 		// TODO Auto-generated method stub
 		this.connection = Bluetooth.waitForConnection();
 
-		LCD.clear();
-		LCD.drawString("Connected", 0, 0);
-		LCD.refresh();
+      RConsole.println("[BT] Connected");
 
 		this.dis = this.connection.openDataInputStream();
 		this.dos = this.connection.openDataOutputStream();
