@@ -16,8 +16,8 @@ public class Main {
 //		robot.moveTo(0, 0);
 //		robot.moveTo(2, 0);
 
-		Job j = new Job(2, 2, 0, 1);
-		robot.getJobs().addJob(j);
+//		Job j = new Job(2, 2, 0, 1);
+//		robot.getJobs().addJob(j);
 		
 		robot.processQueue();
 	}

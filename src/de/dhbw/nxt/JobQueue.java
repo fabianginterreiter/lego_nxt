@@ -12,15 +12,26 @@ public class JobQueue {
 		this.currentJob = null;
 	}
 
-	public void addJob(Job job) {
+	synchronized public void addJob(Job job) {
 		this.queue.add(job);
 	}
 
-	public boolean currentJobFinished() {
+	synchronized public void removeJob(int id) {
+      Iterator<Job> iter = this.queue.iterator();
+      while (iter.hasNext()) {
+         Job job = iter.next();
+         if (job.getId() == id) {
+            iter.remove();
+            break;
+         }
+      }
+   }
+	
+	synchronized public boolean currentJobFinished() {
 		return (this.currentJob != null && this.currentJob.isDelivered());
 	}
 
-	public Job bestJob(int[] currentPos) {
+	synchronized public Job bestJob(int[] currentPos) {
 		if (this.queue.isEmpty()) {
 			return null;
 		}
@@ -38,13 +49,14 @@ public class JobQueue {
 		}
 
 		iterator = this.queue.iterator();
-		while (iterator.hasNext()) {
-			Job currJob = iterator.next();
-			if (currJob.isDelivered()) {
-				this.queue.remove(currJob);
-			}
-		}
+      while (iterator.hasNext()) {
+         Job currJob = iterator.next();
+         if (currJob.isDelivered()) {
+            iterator.remove();
+         }
+      }
 		
-		return bestJob;
+      // If the best job is already delivered, return null.
+      return bestJob.isDelivered() ? null : bestJob;
 	}
 }
