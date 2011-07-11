@@ -34,24 +34,65 @@ public class BTHandler implements Runnable {
 		this.dos = this.connection.openDataOutputStream();
 	}
 
+	public String readAction() throws IOException {
+	   synchronized (this.dis) {
+	      return this.dis.readUTF();
+	   }
+	}
+	
+	public int readJobId() throws IOException {
+	   synchronized (this.dis) {
+	      return this.dis.readInt();
+	   }
+	}
+	
+	public int[] readJobPositions() throws IOException {
+	   synchronized (this.dis) {
+	      return new int[] {
+	               this.dis.readInt(), this.dis.readInt(),
+	               this.dis.readInt(), this.dis.readInt()
+	      };
+	   }
+	}
+	
+	public void writeJobId(int id) throws IOException {
+	   synchronized (this.dos) {
+	      this.dos.writeInt(id);
+	      this.dos.flush();
+	   }
+	}
+	
+	public void writeJobStatus(int id, String status) throws IOException {
+	   synchronized (this.dos) {
+	      this.dos.writeUTF("update-status");
+	      this.dos.writeUTF(status);
+	      this.dos.flush();
+	   }
+	}
+	
 	@Override
 	public void run() {
 		try {
 			while (true) {
-				RConsole.println("[BT] Receiving destination...");
+			   String action = this.readAction();
+			   
+			   if (action.equals("add-job")) {
+	            RConsole.println("[BT] Receiving positions...");
+			      int[] pos = this.readJobPositions();
 
-				int fx = this.dis.readInt();
-				int fy = this.dis.readInt();
-				int dx = this.dis.readInt();
-				int dy = this.dis.readInt();
+			      RConsole.println("[BT] Sending Job ID...");
 
-				RConsole.println("[BT] Sending Job ID...");
+	            Job job = new Job(pos[0], pos[1], pos[2], pos[3]);
+               this.robot.getQueue().addJob(job);
+	            this.writeJobId(job.getId());
+			   } else if (action.equals("remove-job")) {
+               RConsole.println("[BT] Receiving positions...");
 
-				Job job = new Job(fx, fy, dx, dy);
-				this.dos.writeInt(job.getId());
-				this.dos.flush();
-
-				this.robot.getQueue().addJob(job);
+               int id = this.readJobId();
+			      this.robot.getQueue().removeJob(id);
+			   } else {
+			      RConsole.println("[SYS] Unknown Action: " + action);
+			   }
 			}
 		} catch (IOException e1) {
 			RConsole.println("IO Error occurred while doing BT communications!");
